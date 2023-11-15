@@ -2,7 +2,7 @@
 
 
 @include 'database.php';
-$maxfilesize = 50000000; //50MB
+$maxfilesize = 50*1024; //50MB
 $allowUpload = true;
 function convert_upload_file_array($upload_files)
 {
@@ -97,7 +97,11 @@ if (isset($_POST['send'])) {
             }
         }
     }
-
+}
+if (isset($_POST['campus'])) {
+    $selectedCampus = $_POST['campus'];
+} else {
+    $selectedCampus = null;
 }
 
 function PageCount_PPTX($file)
@@ -171,9 +175,9 @@ function count_pdf_pages($pdfname)
                 <p>ĐĂNG KÍ IN TÀI LIỆU</p>
             </div>
             <div class="campus">
-                <label class="choose-campus">Chọn cơ sở</label>
-                <button class="campus-button campus-container">Cơ sở 1</button>
-                <button class="campus-button campus-container">Cơ sở 2</button>
+                <label class="choose-campus" name="campus">Chọn cơ sở</label>
+                <button class="campus-button campus-container" id="campus1">Cơ sở 1</button>
+                <button class="campus-button campus-container" id="campus2">Cơ sở 2</button>
             </div>
             <div class="flex">
                 <div class="building">
@@ -182,7 +186,29 @@ function count_pdf_pages($pdfname)
                         <select class="dropdown-menu" name="building">
                             <option class="embed" value="toa1">Toà 1</option>
                             <option class="embed" value="toa2">Toà 2</option>
-                            <option class="embed" value="toa3">Toà 3</option>
+                            <?php
+                            $selectedCampus = $_POST['campus'];
+
+                            // // Get the selected campus from local storage
+                            // echo "<script>document.write(localStorage.getItem('selectedCampus'));</script>";
+                            
+                            if ($selectedCampus != null) {
+                                $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
+                                $result = $conn->query($query);
+                            }
+                            if ($result) {
+                                // Process the query result
+                                while ($row = $result->fetch_assoc()) {
+                                    // Access the data from the row
+                                    $columnValue = $row['PRINTERS_BUILDINGLOC'];
+                                    // Generate the HTML code for each building option
+                                    echo '<option class="embed" value="' . $columnValue . '">' . $columnValue . '</option>';
+                                }
+                            } else {
+                                // Handle the case when the query fails
+                                echo "Error executing the query: " . $conn->error;
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -190,9 +216,8 @@ function count_pdf_pages($pdfname)
                     <label class="choose-printer">Chọn máy in:</label>
                     <div>
                         <select class="dropdown-menu" name="printer">
-                            <option class="embed" value="">test1</option>
-                            <option class="embed" value="">test2</option>
-                            <option class="embed" value="">Test3</option>
+                            <option class="embed" value="id1">2H11011</option>
+                            <option class="embed" value="id2">1A21011</option>
                         </select>
                     </div>
                 </div>
@@ -270,27 +295,57 @@ function count_pdf_pages($pdfname)
         function openAttributesForm() {
             window.open("printAttributes.php", "_blank", "width=1050,height=800");
         }
+
+        // For saving campus
         $(document).ready(function () {
             $('.campus-button').click(function () {
-                var selectedCampus = $(this).text().trim();
-                $('#selectedCampusInput').val(selectedCampus);
-                $('.dropdown-menu option').each(function () {
-                    if ($(this).text().trim() === selectedCampus) {
-                        $(this).addClass('selected');
-                    } else {
-                        $(this).removeClass('selected');
-                    }
+                var selectedCampus = $(this).attr('id'); // Get the id of the selected campus button
+
+                localStorage.setItem('selectedCampus', selectedCampus);
+                $.post('updateCampus.php', { campus: selectedCampus }, function (response) {
+                    // You can use the response from the server here if needed
                 });
-                $('#campusForm').submit();
+            });
+        
+
+        //for filtering building in campus, idk but do not touch 
+            $(document).ready(function () {
+                $('.campus-button').click(function () {
+                    var selectedCampus = $(this).attr('id').replace('campus', ''); // Get the id of the selected campus button
+
+                    // Send an AJAX request to getBuildings.php
+                    $.post('updateBuilding.php', { campus: selectedCampus }, function (response) {
+                        // Parse the JSON response from the server
+                        var buildings = JSON.parse(response);
+
+                        // Clear the building dropdown list
+                        $('select[name="building"]').empty();
+
+                        // Add each building to the dropdown list
+                        $.each(buildings, function (index, building) {
+                            $('select[name="building"]').append('<option class="embed" value="' + building + '">' + building + '</option>');
+                        });
+                    });
+                });
             });
         });
-        (document).ready(function () {
-            $('.printer-short-desc:nth-child(2)').click(function () {
-                $('#popupContainer').fadeIn();
-            });
+        $(document).ready(function () {
+            $('select[name="building"]').change(function () {
+                var selectedBuilding = $(this).val(); // Get the value of the selected building
 
-            $('.quay-li').click(function () {
-                $('#popupContainer').fadeOut();
+                // Send an AJAX request to getPrinters.php
+                $.post('updatePrinters.php', { building: selectedBuilding }, function (response) {
+                    // Parse the JSON response from the server
+                    var printers = JSON.parse(response);
+
+                    // Clear the printer dropdown list
+                    $('select[name="printer"]').empty();
+
+                    // Add each printer to the dropdown list
+                    $.each(printers, function (index, printer) {
+                        $('select[name="printer"]').append('<option class="embed" value="' + printer + '">' + printer + '</option>');
+                    });
+                });
             });
         });
     </script>
