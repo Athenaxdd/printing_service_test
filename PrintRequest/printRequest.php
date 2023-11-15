@@ -98,6 +98,8 @@ if (isset($_POST['send'])) {
         }
     }
 }
+
+// prevent campus not chosen brick the html
 if (isset($_POST['campus'])) {
     $selectedCampus = $_POST['campus'];
 } else {
@@ -117,7 +119,6 @@ function PageCount_PPTX($file)
             $xml = new SimpleXMLElement($data);
             $pageCount = $xml->Slides;
         }
-        #$zip->close();
     }
 
     return $pageCount;
@@ -188,9 +189,6 @@ function count_pdf_pages($pdfname)
                             <option class="embed" value="toa2">Toà 2</option>
                             <?php
                             $selectedCampus = $_POST['campus'];
-
-                            // // Get the selected campus from local storage
-                            // echo "<script>document.write(localStorage.getItem('selectedCampus'));</script>";
                             
                             if ($selectedCampus != null) {
                                 $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
@@ -216,8 +214,8 @@ function count_pdf_pages($pdfname)
                     <label class="choose-printer">Chọn máy in:</label>
                     <div>
                         <select class="dropdown-menu" name="printer">
-                            <option class="embed" value="id1">2H11011</option>
-                            <option class="embed" value="id2">1A21011</option>
+                            <option class="embed" value="id1">Campus1</option>
+                            <option class="embed" value="id2">Campus2</option>
                         </select>
                     </div>
                 </div>
