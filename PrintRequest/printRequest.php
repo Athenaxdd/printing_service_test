@@ -2,7 +2,7 @@
 
 
 @include 'database.php';
-$maxfilesize = 50*1024; //50MB
+$maxfilesize = 50 * 1024; //50MB
 $allowUpload = true;
 function convert_upload_file_array($upload_files)
 {
@@ -105,7 +105,6 @@ if (isset($_POST['campus'])) {
 } else {
     $selectedCampus = null;
 }
-
 function PageCount_PPTX($file)
 {
     $pageCount = 0;
@@ -130,6 +129,7 @@ function count_pdf_pages($pdfname)
 
     return $num;
 }
+
 ?>
 
 
@@ -170,6 +170,7 @@ function count_pdf_pages($pdfname)
 
     <!-- header section ends -->
 
+    <!-- main section start -->
     <section class="main">
         <div class="container">
             <div class="main-text">
@@ -185,11 +186,10 @@ function count_pdf_pages($pdfname)
                     <label class="choose-building">Chọn toà:</label>
                     <div>
                         <select class="dropdown-menu" name="building">
-                            <option class="embed" value="toa1">Toà 1</option>
-                            <option class="embed" value="toa2">Toà 2</option>
+                            <option class="embed" value="toa1">Choose Building</option>
                             <?php
                             $selectedCampus = $_POST['campus'];
-                            
+
                             if ($selectedCampus != null) {
                                 $query = "SELECT * FROM PRINTERS_LIST WHERE PRINTERS_CAMPUSLOC = '$selectedCampus'";
                                 $result = $conn->query($query);
@@ -214,8 +214,7 @@ function count_pdf_pages($pdfname)
                     <label class="choose-printer">Chọn máy in:</label>
                     <div>
                         <select class="dropdown-menu" name="printer">
-                            <option class="embed" value="id1">Campus1</option>
-                            <option class="embed" value="id2">Campus2</option>
+                            <option class="embed" value="id1">Choose Printers</option>
                         </select>
                     </div>
                 </div>
@@ -238,13 +237,12 @@ function count_pdf_pages($pdfname)
                     </div>
                     <div class="upload-frame">
                         <span id="uploadedFileName"></span>
-                        </span>
                     </div>
                 </div>
 
             </div>
-
     </section>
+    <!-- main section ends -->
 
     <!-- footer section starts -->
     <div class="footer-container">
@@ -282,6 +280,7 @@ function count_pdf_pages($pdfname)
         </div>
     </div>
 
+    <!-- script -->
     <script>
         function openFileInput() {
             document.getElementById("fileInput").click();
@@ -297,29 +296,27 @@ function count_pdf_pages($pdfname)
         // For saving campus
         $(document).ready(function () {
             $('.campus-button').click(function () {
-                var selectedCampus = $(this).attr('id'); // Get the id of the selected campus button
+                var selectedCampus = $(this).attr('id');
 
                 localStorage.setItem('selectedCampus', selectedCampus);
                 $.post('updateCampus.php', { campus: selectedCampus }, function (response) {
-                    // You can use the response from the server here if needed
+
                 });
             });
-        
 
-        //for filtering building in campus, idk but do not touch 
+
+            //for filtering building in campus, idk but do not touch 
             $(document).ready(function () {
                 $('.campus-button').click(function () {
                     var selectedCampus = $(this).attr('id').replace('campus', ''); // Get the id of the selected campus button
 
-                    // Send an AJAX request to getBuildings.php
+                    // Send an AJAX request
                     $.post('updateBuilding.php', { campus: selectedCampus }, function (response) {
                         // Parse the JSON response from the server
                         var buildings = JSON.parse(response);
 
-                        // Clear the building dropdown list
-                        $('select[name="building"]').empty();
+                        $('select[name="building"]').empty(); // Clear the building dropdown list
 
-                        // Add each building to the dropdown list
                         $.each(buildings, function (index, building) {
                             $('select[name="building"]').append('<option class="embed" value="' + building + '">' + building + '</option>');
                         });
@@ -329,17 +326,14 @@ function count_pdf_pages($pdfname)
         });
         $(document).ready(function () {
             $('select[name="building"]').change(function () {
-                var selectedBuilding = $(this).val(); // Get the value of the selected building
+                var selectedBuilding = $(this).val();
 
-                // Send an AJAX request to getPrinters.php
+                $('select[name="printer"]').empty();
+
                 $.post('updatePrinters.php', { building: selectedBuilding }, function (response) {
-                    // Parse the JSON response from the server
+
                     var printers = JSON.parse(response);
 
-                    // Clear the printer dropdown list
-                    $('select[name="printer"]').empty();
-
-                    // Add each printer to the dropdown list
                     $.each(printers, function (index, printer) {
                         $('select[name="printer"]').append('<option class="embed" value="' + printer + '">' + printer + '</option>');
                     });
