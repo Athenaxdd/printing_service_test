@@ -230,9 +230,9 @@ section {
   color: #fff;
 }
 .campus-button.selected {
-    color: #000;
-  }
-  
+  color: #000;
+}
+
 .campus-container {
   height: 19px;
   width: 316px;
@@ -400,7 +400,7 @@ section {
   margin-left: 30px;
 }
 
-.printer-short-desc:hover{
+.printer-short-desc:hover {
   opacity: 0.75;
 }
 
@@ -431,4 +431,13 @@ section {
 
 .file-input {
   display: none;
+}
+
+.confirm-button {
+  background-color: #095195;
+  color: #fff;
+  display: flex;
+  margin-top: 75px;
+  padding: 15px;
+  align-self: flex-end;
 }

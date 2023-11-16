@@ -239,8 +239,12 @@ function count_pdf_pages($pdfname)
                         <span id="uploadedFileName"></span>
                     </div>
                 </div>
-
             </div>
+            <button class="printer-short-desc confirm-button">
+                <p>Xac nhan</p>
+                <a href="sendRequest/php"></a>
+            </button>
+        </div>
     </section>
     <!-- main section ends -->
 
