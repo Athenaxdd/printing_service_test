@@ -120,7 +120,9 @@ if (isset($_POST['campus'])) {
                         <div class="">
                             <span>Trạng thái hoạt động: </span>
                             <span class="printer-info-text"></span>
-                            <button>(Thay đổi)</button>
+                            <button class="update-state-button" onclick="openUpdatePrinterState()">
+                                <p>(Thay đổi)</p>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -229,6 +231,10 @@ if (isset($_POST['campus'])) {
                 });
             });
         });
+
+        function openUpdatePrinterState() {
+            window.open("updatePrinterState.php", "_blank", "width=500,height=500");
+        }
     </script>
 </body>
 

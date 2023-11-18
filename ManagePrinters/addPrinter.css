@@ -682,3 +682,98 @@ section {
 .update-state-button:hover {
   font-weight: bold;
 }
+
+/* test */
+
+.menu {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: var(--gap-base);
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+}
+.input-text {
+  position: relative;
+  align-items: center;
+  width: 221px;
+  flex-shrink: 0;
+}
+.add-printer,
+.input,
+.input-text,
+.input-text1 {
+  display: flex;
+  justify-content: center;
+}
+.input-text1 {
+  position: relative;
+  font-weight: 500;
+  align-items: center;
+  width: 185px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.ID-text{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  font-weight: 500;
+  align-items: center;
+  width: 185px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.add-printer,
+.input {
+  border-radius: var(--br-9xs);
+  border: 1px solid var(--color-dimgray);
+  box-sizing: border-box;
+}
+.input {
+  width: 205px;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--padding-3xs);
+  color: var(--color-gray);
+}
+.add-printer {
+  position: relative;
+  top: 30px;
+  /* padding: 15px; */
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--padding-9xl-5);
+  gap: var(--gap-base);
+}
+
+.confirm-button {
+  background-color: #095195;
+  color: #fff;
+  display: flex;
+  padding: 15px;
+  align-self: flex-end;
+  border-radius: 4px;
+  border: 1px solid #000;
+}
+
+.check-button{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: center;
+  width: 95px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  height: 36px;
+}
+
+.id-check-text{
+  display: none;
+  color:#095195;
+  font-weight: bold;
+}
