@@ -99,7 +99,7 @@ if (isset($_POST['campus'])) {
                     <div class="menu">
                         <b class="input-text">ID</b>
                         <div class="input">
-                            <input type="text" name="printerId" type="text" class="ID-text" required>
+                            <input type="text" name="printerId" class="ID-text input-text1" required>
                         </div>
                         <button class="check-button" onclick="clearTextID()">Check</button>
                         <span id="idExistsText" class="id-check-text"></span>
@@ -344,6 +344,7 @@ if (isset($_POST['campus'])) {
             });
         }
         function clearTextID() {
+            
             var inputElement = $('.input-text1');
             var inputValue = inputElement.val();
 
@@ -373,12 +374,12 @@ if (isset($_POST['campus'])) {
                 }
             });
         }
-        document.getElementById("addPrinterForm").onsubmit = function () {
-            var idExistsText = document.getElementById("idExistsText").textContent;
-            if (idExistsText === "ID already exists") {
-                return false; // Prevent form submission
-            }
-        };
+        // document.getElementById("addPrinterForm").onsubmit = function () {
+        //     var idExistsText = document.getElementById("idExistsText").textContent;
+        //     if (idExistsText === "ID already exists") {
+        //         return false; // Prevent form submission
+        //     }
+        // };
     </script>
 </body>
 
